@@ -33,7 +33,7 @@ app.get('/api/token/:token_id', function(req, res) {
       'transparent': nft.transparent,    
       'fruits': nft.fruits
     },
-    'image': `${HOST}/images/${tokenId}.png`
+    'image': `${HOST}/images/${tokenId}.png`   
   }
   res.send(data)
 })
