@@ -1,22 +1,33 @@
 module.exports = {
   "1": {
-    "name": "Chunky Monkey",
-    "birthday": "10-18"
+    "name" : "trees - rewards",
+    "type": "seed",
+    "stakeTime": "1 day",
+    "transparent": "true"  
   },
   "2": {
-    "name": "Flerp Derp",
-    "birthday": "01-08"
+    "name" : "trees - rewards",
+    "type": "sprout",
+    "stakeTime": "5 days",
+    "transparent": "true"  
   },
   "3": {
-    "name": "Buttle McFuddle",
-    "birthday": "01-22"
+    "name" : "trees - rewards",
+    "type": "seedling ",
+    "stakeTime": "2 weeks",
+    "transparent": "true"  
   },
   "4": {
-    "name": "Quiero Pancakes",
-    "birthday": "03-04"
+    "name" : "trees - rewards",
+    "type": "mature",
+    "stakeTime": "3 months",
+    "transparent": "true"  
   },
   "5": {
-    "name": "Guino the Penguin",
-    "birthday": "03-09"
+    "name" : "trees - rewards",
+    "type": "mature",
+    "stakeTime": "1 year",
+    "transparent": "true",
+    "fruits": "true"
   }
 }
