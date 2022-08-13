@@ -1,10 +1,22 @@
-const express = require('express')
-const path = require('path')
-const moment = require('moment')
-const { HOST } = require('./src/constants')
-const db = require('./src/database')
+import express  from 'Express'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import pkgMoment from 'moment'
+const {moment} = pkgMoment
+import  HOST  from './src/constants.js'
+import pkgMoralis from '@moralisweb3/core';
+const { moralis } = pkgMoralis;
+import { EvmChain } from '@moralisweb3/evm-utils';
+import db  from './src/database.js';
+//const db = require('./src/database')
+//const moment = require('moment')
+//const { HOST } = require('./src/constants')
+//const path = require('path')
+//const Express = require('express')
 
 const PORT = process.env.PORT || 5000
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express()
   .set('port', PORT)
