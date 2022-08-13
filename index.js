@@ -4,19 +4,68 @@ import { fileURLToPath } from 'url';
 import pkgMoment from 'moment'
 const {moment} = pkgMoment
 import  HOST  from './src/constants.js'
-import pkgMoralis from '@moralisweb3/core';
-const { moralis } = pkgMoralis;
-import { EvmChain } from '@moralisweb3/evm-utils';
 import db  from './src/database.js';
-//const db = require('./src/database')
-//const moment = require('moment')
-//const { HOST } = require('./src/constants')
-//const path = require('path')
-//const Express = require('express')
+import abiNFT from './src/abi.js';
+import env from 'dotenv'
+import axios from 'axios'
+import ethers from 'ethers'
 
-const PORT = process.env.PORT || 5000
+env.config()
+
+//why this line : https://bobbyhadz.com/blog/javascript-dirname-is-not-defined-in-es-module-scope#:~:text=The%20__dirname%20or%20__,directory%20name%20of%20the%20path.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const ADDRESSPROTOCOL = '0xe2790A1F0b412EA3880a5B93Ae6bd4F966C20CED';
+const ADRESSNFT = '0x5B51857C8220Ac230fb93aA0087587fD4229eE8d'
+const PORT = process.env.PORT || 5000
+const API_KEY = process.env.MORALISV2_API_KEY;
+const TRANSFER = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+const ADDRESS0 = '0x0000000000000000000000000000000000000000000000000000000000000000'
+
+
+function ownerOf(_tokenId){
+  const options = {
+    method: 'POST',
+    url: `https://deep-index.moralis.io/api/v2/${ADRESSNFT}/function?chain=mumbai&function_name=ownerOf`,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-API-Key': API_KEY
+    },
+    data: {abi: abiNFT, params: {tokenId: _tokenId}}
+  };
+
+    axios
+    .request(options)
+    .then(function (response) {
+      //console.log(response.data);
+     let addressTo = ethers.utils.hexZeroPad(response.data, 32)
+      filterDeposits(addressTo);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+function filterDeposits(addressTo){
+const options = {
+  method: 'GET',
+  url: `https://deep-index.moralis.io/api/v2/${ADDRESSPROTOCOL}/logs?chain=mumbai&topic0=${TRANSFER}&topic1=${ADDRESS0}&topic2=${addressTo}`,
+  headers: {
+    Accept: 'application/json',
+    'X-API-Key': API_KEY
+  }
+};
+
+axios
+  .request(options)
+  .then(function (response) {
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    console.error(error);
+});
+}
 
 const app = express()
   .set('port', PORT)
@@ -36,7 +85,7 @@ app.get('/api/token/:token_id', function(req, res) {
   //const bdayParts = nft.birthday.split(' ')
   //const day = parseInt(bdayParts[1])
   //const month = parseInt(bdayParts[0])
-  
+  console.log(ownerOf(tokenId))
   const data = {
     'name': nft.name,
     'attributes': {

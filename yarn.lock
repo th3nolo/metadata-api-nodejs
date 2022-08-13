@@ -17,6 +17,11 @@
   dependencies:
     "regenerator-runtime" "^0.13.4"
 
+"@bundled-es-modules/axios@^0.27.2":
+  "integrity" "sha512-PO/CUWB4KzesrPCHgpoLWBTl6v0jXdod84msF6J/8KyaK+BHahnfv1FvMCJpUnpdP2naMhIIBOzMl1ydBZmCRA=="
+  "resolved" "https://registry.npmjs.org/@bundled-es-modules/axios/-/axios-0.27.2.tgz"
+  "version" "0.27.2"
+
 "@ethersproject/abi@^5.6.0", "@ethersproject/abi@5.6.0":
   "integrity" "sha512-AhVByTwdXCc2YQ20v300w6KVHle9g2OFc28ZAFCPnJyEpkv1xKXjZcSTgWOlv1i+0dqlgF8RCF2Rn2KC1t+1Vg=="
   "resolved" "https://registry.npmjs.org/@ethersproject/abi/-/abi-5.6.0.tgz"

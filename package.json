@@ -11,6 +11,7 @@
   "author": "Alex Atallah <alex.atallah@opensea.io>",
   "license": "MIT",
   "dependencies": {
+    "@bundled-es-modules/axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
