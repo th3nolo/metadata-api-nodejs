@@ -12,11 +12,11 @@ import ethers from 'ethers'
 
 env.config()
 
-//why this line : https://bobbyhadz.com/blog/javascript-dirname-is-not-defined-in-es-module-scope#:~:text=The%20__dirname%20or%20__,directory%20name%20of%20the%20path.
+//why this line : https://bobbyhadz.com/blog/javascript-dirname-is-not-defined-in-es-module-scope#:~:text=The%20__dirname%20or%20__,directory%20name%20of%20the%20pathclea.
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ADDRESSPROTOCOL = '0xe2790A1F0b412EA3880a5B93Ae6bd4F966C20CED';
-const ADRESSNFT = '0x5B51857C8220Ac230fb93aA0087587fD4229eE8d'
+const ADDRESSPROTOCOL = process.env.ADDRESSPROTOCOL || '0xe2790A1F0b412EA3880a5B93Ae6bd4F966C20CED';
+const ADDRESSNFT = process.env.ADDRESSNFT || '0x5B51857C8220Ac230fb93aA0087587fD4229eE8d'
 const PORT = process.env.PORT || 5000
 const API_KEY = process.env.MORALISV2_API_KEY;
 const TRANSFER = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
@@ -26,7 +26,7 @@ const ADDRESS0 = '0x000000000000000000000000000000000000000000000000000000000000
 function ownerOf(_tokenId){
   const options = {
     method: 'POST',
-    url: `https://deep-index.moralis.io/api/v2/${ADRESSNFT}/function?chain=mumbai&function_name=ownerOf`,
+    url: `https://deep-index.moralis.io/api/v2/${ADDRESSNFT}/function?chain=mumbai&function_name=ownerOf`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -35,36 +35,38 @@ function ownerOf(_tokenId){
     data: {abi: abiNFT, params: {tokenId: _tokenId}}
   };
 
-    axios
+    return axios
     .request(options)
-    .then(function (response) {
-      //console.log(response.data);
-     let addressTo = ethers.utils.hexZeroPad(response.data, 32)
-      filterDeposits(addressTo);
+    .then(function (response) {  
+      let addressTo = ethers.utils.hexZeroPad(response.data, 32)
+      return filterDeposits(addressTo)
     })
     .catch(function (error) {
       console.error(error);
     });
+  
 }
 
 function filterDeposits(addressTo){
 const options = {
   method: 'GET',
-  url: `https://deep-index.moralis.io/api/v2/${ADDRESSPROTOCOL}/logs?chain=mumbai&topic0=${TRANSFER}&topic1=${ADDRESS0}&topic2=${addressTo}`,
+  url: `https://deep-index.moralis.io/api/v2/${ADDRESSPROTOCOL}/logs?chain=mumbai&topic0=${TRANSFER}&topic1=${ADDRESS0}&topic2=${addressTo}&limit=500`,
   headers: {
     Accept: 'application/json',
     'X-API-Key': API_KEY
   }
 };
 
-axios
+return axios
   .request(options)
   .then(function (response) {
-    console.log(response.data);
+    //console.log(response.data)
+    return response.data
   })
   .catch(function (error) {
     console.error(error);
 });
+  
 }
 
 const app = express()
@@ -79,13 +81,25 @@ app.get('/', function(req, res) {
   res.send('Get ready for OpenSea!');
 })
 
-app.get('/api/token/:token_id', function(req, res) {
+app.get('/api/token/:token_id', async function(req, res) {
   const tokenId = parseInt(req.params.token_id).toString()
   const nft = db[tokenId]
   //const bdayParts = nft.birthday.split(' ')
   //const day = parseInt(bdayParts[1])
   //const month = parseInt(bdayParts[0])
-  console.log(ownerOf(tokenId))
+  let stakeTimeArray = await ownerOf(tokenId)
+  //console.log(stakeTimeArray);
+  //console.log("Ultimo resultado?: ", stakeTimeArray.result[stakeTimeArray.result.length - 1].block_timestamp);
+  let firstDeposit = new Date(stakeTimeArray.result[stakeTimeArray.result.length - 1].block_timestamp)
+  let dateNow = new Date()
+  //console.log(firstDeposit)
+  //console.log(dateNowISO8601)
+  //console.log(firstDeposit.toISOString(), dateNow.toISOString())
+  console.log(firstDeposit.toISOString(), dateNow.toISOString())
+  let timeStaked = ((dateNow - firstDeposit) /(1000*3600*24)).toFixed();
+
+  console.log(timeStaked)
+
   const data = {
     'name': nft.name,
     'attributes': {
@@ -103,15 +117,3 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 })
 
-// returns the zodiac sign according to day and month ( https://coursesweb.net/javascript/zodiac-signs_cs )
-//function zodiac(day, month) {
-//  var zodiac =['', 'Capricorn', 'Aquarius', 'Pisces', 'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn'];
-//  var last_day =['', 19, 18, 20, 20, 21, 21, 22, 22, 21, 22, 21, 20, 19];
-//  return (day > last_day[month]) ? zodiac[month*1 + 1] : zodiac[month];
-//}
-
-//function monthName(month) {
-//  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-//  ]
-//  return monthNames[month - 1]
-//}
