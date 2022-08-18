@@ -162,7 +162,7 @@ function stakeResumedAt(addressTo) {
 }
 
 function levelOfToken (days) {
-  let _days = days <= 30 ? 1 : days <= 60 ? 2 : days <= 90 ? 3 : days <= 120 ? 4 : 5;
+  let _days = days <= 1 ? 1 : days <= 30 ? 2 : days <= 90 ? 3 : days <= 180 ? 4 : days >=365 ? 5: 4;
   return _days; 
   //30, 60, 90, 90, 120, 150
 }
