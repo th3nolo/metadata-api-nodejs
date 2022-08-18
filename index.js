@@ -1,4 +1,4 @@
-import express from "Express";
+import express from "express";
 import path from "path";
 import { domainToASCII, fileURLToPath } from "url";
 import pkgMoment from "moment";
