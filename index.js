@@ -32,14 +32,7 @@ const STAKED_RESUMEDAT = "0x39e4283688f7cedd360def9191f85b9a3207636f1a7a2831a202
 const iface =  new ethers.utils.Interface(abiNFT);
 
 
-const sleep = (delay) => {
-  return new Promise(function(resolve) {
-    setTimeout(resolve, delay);
-  });
-}
-
-async function refreshMetadata(_tokenId){    
-  await sleep(5000)
+async function refreshMetadata(_tokenId){      
   const options = {
     method: 'GET',
     url: `https://deep-index.moralis.io/api/v2/nft/${ADDRESSNFT}/${_tokenId}/metadata/resync?chain=mumbai&flag=uri&mode=async`,
@@ -211,7 +204,7 @@ app.get("/api/token/:token_id", async function (req, res) {
 
   const tokenId = parseInt(req.params.token_id).toString();  
   let stakeTimeArray = await ownerOf(tokenId);
-  refreshMetadata(tokenId);
+  //refreshMetadata(tokenId);
   let _result = stakeTimeArray.result[stakeTimeArray.result.length - 1];
   //Block timestamp are in dateNowISO8601, you need to convert it using new Date, to get in epoch time, toISOString() converts the Date into a string in ISO 8601 format.
   //console.log(firstDeposit.toISOString(), dateNow.toISOString());
