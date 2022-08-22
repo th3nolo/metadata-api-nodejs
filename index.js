@@ -32,7 +32,13 @@ const STAKED_RESUMEDAT = "0x39e4283688f7cedd360def9191f85b9a3207636f1a7a2831a202
 const iface =  new ethers.utils.Interface(abiNFT);
 
 
-function refreshMetadata(_tokenId){    
+const sleep = (delay) => {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, delay);
+  });
+}
+
+async function refreshMetadata(_tokenId){    
   await sleep(5000)
   const options = {
     method: 'GET',
