@@ -31,6 +31,27 @@ const STAKE_ENDEDAT = "0xf187ddd32321a75ef62b9b415856a4e6da260b575772cb6e14dde1b
 const STAKED_RESUMEDAT = "0x39e4283688f7cedd360def9191f85b9a3207636f1a7a2831a20222bc085678b3"
 const iface =  new ethers.utils.Interface(abiNFT);
 
+
+function refreshMetadata(_tokenId){    
+  const options = {
+    method: 'GET',
+    url: `https://deep-index.moralis.io/api/v2/nft/${ADDRESSNFT}/${_tokenId}/metadata/resync?chain=mumbai&flag=uri&mode=async`,
+    headers: {
+      Accept: 'application/json',
+      'X-API-Key': 'xTVK25vKf4vxBe8db3OC18Ox0HMtGjxMNJaI6zFzEoXVetpPn0E2qCcJNj1sunGO'
+    }
+  };
+  
+  axios
+    .request(options)
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
 function ownerOf(_tokenId) {
   const options = {
     method: "POST",
@@ -164,7 +185,7 @@ function stakeResumedAt(addressTo) {
 function levelOfToken (days) {
   let _days = days <= 1 ? 1 : days <= 30 ? 2 : days <= 90 ? 3 : days <= 180 ? 4 : days >=365 ? 5: 4;
   return _days; 
-  //30, 60, 90, 90, 120, 150
+  //1, 30, 90, 180, 365
 }
 
 const app = express()
@@ -277,6 +298,7 @@ app.get("/api/token/:token_id", async function (req, res) {
     image: `${HOST}/images/${level}.png`,
   };
   res.send(data);
+  setTimeout(refreshMetadata, 5000, tokenId)
 });
 
 const startServer = async () => {
