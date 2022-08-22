@@ -25,7 +25,7 @@ You need node.js (v16.16.* or later) and npm installed. If you want to do a Hero
 1. To evolve your NFT over Time use the fuction levelOfToken, and set the Days you want for any given Level.
 2. To set the metadata of any given level use the database, and change it with your NFT metadata.
 
-### ENV Example
+### Env Example
 
 ```
 MORALISV3_API_KEY = <apiKeyV3>
