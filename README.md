@@ -18,3 +18,24 @@ You need node.js (v16.16.* or later) and npm installed. If you want to do a Hero
 4. Save the Heroku URL you picked into `src/constants.js` as the `HOST` variable (e.g. `https://your-metadata-api.herokuapp.com`). This is the root URL for the tokens on your contract.
 5. Deploy to Heroku by committing your changes and using `git push heroku master`.
 6. Visit your token's metadata at https://your-metadata-api.herokuapp.com/api/token/1 (for token 1).
+
+
+### Metadata
+
+1. To evolve your NFT over Time use the fuction levelOfToken, and set the Days you want for any given Level.
+2. To set the metadata of any given level use the database, and change it with your NFT metadata.
+
+### ENV Example
+
+```
+MORALISV3_API_KEY = <apiKeyV3>
+MORALISV2_API_KEY = <apiKeyV2>
+ADDRESSNFT = The NFT address
+ADDRESSPROTOCOL = The Protocol Address
+ADDRESSTOKEN = The underlying asset to fund the poool
+SERVER_URL = https://<url>.usemoralis.com:2053/server
+APP_ID = 
+MASTER_KEY = 
+```
+
+Smart Contracts: https://github.com/th3nolo/SolidiTreeSmartContracts
