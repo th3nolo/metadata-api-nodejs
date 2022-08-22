@@ -204,7 +204,7 @@ app.get("/api/token/:token_id", async function (req, res) {
 
   const tokenId = parseInt(req.params.token_id).toString();  
   let stakeTimeArray = await ownerOf(tokenId);
-  setTimeout(refreshMetadata, 5000, tokenId)
+  let timerObj  = setTimeout(refreshMetadata, 5000, tokenId)
   let _result = stakeTimeArray.result[stakeTimeArray.result.length - 1];
   //Block timestamp are in dateNowISO8601, you need to convert it using new Date, to get in epoch time, toISOString() converts the Date into a string in ISO 8601 format.
   //console.log(firstDeposit.toISOString(), dateNow.toISOString());
@@ -298,6 +298,11 @@ app.get("/api/token/:token_id", async function (req, res) {
     },
     image: `${HOST}/images/${level}.png`,
   };
+
+  setImmediate(() => {
+    timerObj.ref();
+  });
+  
   res.send(data);  
 });
 
